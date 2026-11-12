@@ -1,0 +1,36 @@
+<div class="page-header">
+  <h1>Produits</h1>
+  <a class="btn" routerLink="/products/new">+ Nouveau produit</a>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Référence</th>
+      <th>Nom</th>
+      <th>Description</th>
+      <th>Prix HT</th>
+      <th>Stock</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (product of products(); track product.id) {
+      <tr>
+        <td>{{ product.reference }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.unitPriceHt | currency: 'TND' : 'symbol' : '1.2-2' }}</td>
+        <td>{{ product.stockQuantity }}</td>
+        <td class="actions">
+          <a class="btn btn-secondary" [routerLink]="['/products', product.id, 'edit']">Modifier</a>
+          <button class="btn btn-danger" type="button" (click)="delete(product)">Supprimer</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="6" class="empty">Aucun produit.</td>
+      </tr>
+    }
+  </tbody>
+</table>

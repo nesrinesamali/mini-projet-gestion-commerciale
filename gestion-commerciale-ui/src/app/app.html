@@ -1,0 +1,21 @@
+<nav class="navbar">
+  <span class="brand">Gestion Commerciale</span>
+
+  @if (auth.isLoggedIn()) {
+    <a routerLink="/clients" routerLinkActive="active">Clients</a>
+    <a routerLink="/products" routerLinkActive="active">Produits</a>
+    <a routerLink="/orders" routerLinkActive="active">Commandes</a>
+    <span class="user">{{ auth.username() }}</span>
+    <button class="logout" type="button" (click)="auth.logout()">Déconnexion</button>
+  }
+</nav>
+
+@if (notifications.message(); as note) {
+  <div class="toast" [class.success]="note.type === 'success'" [class.error]="note.type === 'error'">
+    {{ note.text }}
+  </div>
+}
+
+<main class="container">
+  <router-outlet />
+</main>

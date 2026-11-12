@@ -1,0 +1,72 @@
+<div class="page-header">
+  <h1>{{ orderId() ? 'Modifier la commande' : 'Nouvelle commande' }}</h1>
+</div>
+
+<form class="card" [formGroup]="form" (ngSubmit)="save()">
+  <div class="form-row">
+    <label for="client">Client *</label>
+    <select id="client" formControlName="clientId" [class.invalid]="invalid(form.controls.clientId)">
+      <option [ngValue]="0">-- Choisir un client --</option>
+      @for (client of clients(); track client.id) {
+        <option [ngValue]="client.id">{{ client.firstNameOrCompany }} {{ client.lastName }}</option>
+      }
+    </select>
+    @if (invalid(form.controls.clientId)) {
+      <span class="field-error">Le client est obligatoire.</span>
+    }
+  </div>
+
+  <h3>Lignes de commande</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Produit</th>
+        <th>Prix unitaire HT</th>
+        <th>Quantité</th>
+        <th>Total ligne</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody formArrayName="lines">
+      @for (line of lines.controls; track $index; let i = $index) {
+        <tr [formGroupName]="i">
+          <td>
+            <select formControlName="productId" [class.invalid]="invalid(line.get('productId'))">
+              <option [ngValue]="0">-- Choisir un produit --</option>
+              @for (product of products(); track product.id) {
+                <option [ngValue]="product.id">{{ product.reference }} - {{ product.name }}</option>
+              }
+            </select>
+            @if (invalid(line.get('productId'))) {
+              <div class="field-error">Le produit est obligatoire.</div>
+            }
+          </td>
+          <td>{{ unitPrice(i) | currency: 'TND' : 'symbol' : '1.2-2' }}</td>
+          <td>
+            <input type="number" min="1" formControlName="quantity" [class.invalid]="invalid(line.get('quantity')) || exceedsStock(i)" />
+            @if (invalid(line.get('quantity'))) {
+              <div class="field-error">La quantité doit être supérieure à 0.</div>
+            }
+            @if (exceedsStock(i)) {
+              <div class="field-error">Stock disponible : {{ stockOf(i) }}</div>
+            }
+          </td>
+          <td>{{ lineTotal(i) | currency: 'TND' : 'symbol' : '1.2-2' }}</td>
+          <td>
+            <button class="btn btn-danger" type="button" (click)="removeLine(i)">Retirer</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <p><button class="btn btn-secondary" type="button" (click)="addLine()">+ Ajouter une ligne</button></p>
+
+  <p><strong>Total HT :</strong> {{ totalHt() | currency: 'TND' : 'symbol' : '1.2-2' }}</p>
+  <p><strong>Total TTC (TVA 19 %) :</strong> {{ totalTtc() | currency: 'TND' : 'symbol' : '1.2-2' }}</p>
+
+  <div class="actions">
+    <button class="btn" type="submit">Enregistrer</button>
+    <a class="btn btn-secondary" routerLink="/orders">Annuler</a>
+  </div>
+</form>

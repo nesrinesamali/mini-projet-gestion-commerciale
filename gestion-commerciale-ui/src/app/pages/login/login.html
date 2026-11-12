@@ -1,0 +1,21 @@
+<form class="card login-card" [formGroup]="form" (ngSubmit)="submit()">
+  <h1>Connexion</h1>
+
+  <div class="form-row">
+    <label for="username">Identifiant *</label>
+    <input id="username" formControlName="username" autocomplete="username" [class.invalid]="invalid(form.controls.username)" />
+    @if (invalid(form.controls.username)) {
+      <span class="field-error">L'identifiant est obligatoire.</span>
+    }
+  </div>
+
+  <div class="form-row">
+    <label for="password">Mot de passe *</label>
+    <input id="password" type="password" formControlName="password" autocomplete="current-password" [class.invalid]="invalid(form.controls.password)" />
+    @if (invalid(form.controls.password)) {
+      <span class="field-error">Le mot de passe est obligatoire.</span>
+    }
+  </div>
+
+  <button class="btn" type="submit">Se connecter</button>
+</form>

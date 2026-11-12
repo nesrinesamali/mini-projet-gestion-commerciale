@@ -1,0 +1,69 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 32px;
+  background: #1f3a5f;
+}
+
+.brand {
+  margin-right: auto;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.navbar a {
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #d6e2f3;
+  text-decoration: none;
+}
+
+.navbar a:hover,
+.navbar a.active {
+  background: #2f5384;
+  color: #ffffff;
+}
+
+.toast {
+  position: fixed;
+  top: 70px;
+  right: 24px;
+  z-index: 100;
+  max-width: 420px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.toast.success {
+  background: #2e7d32;
+}
+
+.toast.error {
+  background: #c62828;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+.user {
+  color: #d6e2f3;
+}
+
+.logout {
+  padding: 6px 12px;
+  border: 1px solid #d6e2f3;
+  border-radius: 6px;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background: #2f5384;
+}

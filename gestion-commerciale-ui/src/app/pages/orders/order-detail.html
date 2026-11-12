@@ -1,0 +1,48 @@
+@if (order(); as order) {
+  <div class="page-header">
+    <h1>Commande {{ order.orderNumber }}</h1>
+    <span class="badge" [class]="'badge ' + order.status">{{ statusLabels[order.status] }}</span>
+  </div>
+
+  <div class="card">
+    <p><strong>Client :</strong> {{ order.clientName }}</p>
+    <p><strong>Date :</strong> {{ order.orderDate | date: 'dd/MM/yyyy HH:mm' }}</p>
+  </div>
+
+  <h3>Lignes</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Référence</th>
+        <th>Produit</th>
+        <th>Quantité</th>
+        <th>Prix unitaire HT</th>
+        <th>Total ligne</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (line of order.lines; track line.id) {
+        <tr>
+          <td>{{ line.productReference }}</td>
+          <td>{{ line.productName }}</td>
+          <td>{{ line.quantity }}</td>
+          <td>{{ line.unitPrice | currency: 'TND' : 'symbol' : '1.2-2' }}</td>
+          <td>{{ line.lineTotal | currency: 'TND' : 'symbol' : '1.2-2' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="card">
+    <p><strong>Total HT :</strong> {{ order.totalHt | currency: 'TND' : 'symbol' : '1.2-2' }}</p>
+    <p><strong>Total TTC :</strong> {{ order.totalTtc | currency: 'TND' : 'symbol' : '1.2-2' }}</p>
+  </div>
+
+  <p class="actions">
+    @if (order.status === 'Draft') {
+      <a class="btn btn-secondary" [routerLink]="['/orders', order.id, 'edit']">Modifier</a>
+      <button class="btn btn-success" type="button" (click)="validate(order)">Valider</button>
+    }
+    <a class="btn btn-secondary" routerLink="/orders">Retour à la liste</a>
+  </p>
+}

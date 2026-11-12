@@ -1,0 +1,44 @@
+<div class="page-header">
+  <h1>Commandes</h1>
+  <a class="btn" routerLink="/orders/new">+ Nouvelle commande</a>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>N° commande</th>
+      <th>Client</th>
+      <th>Date</th>
+      <th>Statut</th>
+      <th>Total HT</th>
+      <th>Total TTC</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (order of orders(); track order.id) {
+      <tr>
+        <td>{{ order.orderNumber }}</td>
+        <td>{{ order.clientName }}</td>
+        <td>{{ order.orderDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td><span class="badge" [class]="'badge ' + order.status">{{ statusLabels[order.status] }}</span></td>
+        <td>{{ order.totalHt | currency: 'TND' : 'symbol' : '1.2-2' }}</td>
+        <td>{{ order.totalTtc | currency: 'TND' : 'symbol' : '1.2-2' }}</td>
+        <td class="actions">
+          <a class="btn btn-secondary" [routerLink]="['/orders', order.id]">Détail</a>
+          @if (order.status === 'Draft') {
+            <a class="btn btn-secondary" [routerLink]="['/orders', order.id, 'edit']">Modifier</a>
+            <button class="btn btn-success" type="button" (click)="validate(order)">Valider</button>
+          }
+          @if (order.status !== 'Validated') {
+            <button class="btn btn-danger" type="button" (click)="delete(order)">Supprimer</button>
+          }
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="7" class="empty">Aucune commande.</td>
+      </tr>
+    }
+  </tbody>
+</table>

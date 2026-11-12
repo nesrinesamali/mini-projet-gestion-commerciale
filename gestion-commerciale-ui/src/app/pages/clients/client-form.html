@@ -1,0 +1,78 @@
+<div class="page-header">
+  <h1>{{ clientId() ? 'Modifier le client' : 'Nouveau client' }}</h1>
+</div>
+
+<form class="card" [formGroup]="form" (ngSubmit)="save()">
+  <div class="form-row">
+    <label for="lastName">Nom *</label>
+    <input id="lastName" formControlName="lastName" [class.invalid]="invalid(form.controls.lastName)" />
+    @if (invalid(form.controls.lastName)) {
+      <span class="field-error">Le nom est obligatoire.</span>
+    }
+  </div>
+
+  <div class="form-row">
+    <label for="firstName">Prénom ou raison sociale *</label>
+    <input id="firstName" formControlName="firstNameOrCompany" [class.invalid]="invalid(form.controls.firstNameOrCompany)" />
+    @if (invalid(form.controls.firstNameOrCompany)) {
+      <span class="field-error">Le prénom ou la raison sociale est obligatoire.</span>
+    }
+  </div>
+
+  <div class="form-row">
+    <label for="email">Email *</label>
+    <input id="email" type="email" formControlName="email" [class.invalid]="invalid(form.controls.email)" />
+    @if (invalid(form.controls.email)) {
+      <span class="field-error">Un email valide est obligatoire.</span>
+    }
+  </div>
+
+  <div class="form-row">
+    <label for="phone">Téléphone *</label>
+    <input id="phone" formControlName="phone" placeholder="20123456" [class.invalid]="invalid(form.controls.phone)" />
+    @if (invalid(form.controls.phone)) {
+      <span class="field-error">Téléphone invalide (8 à 15 chiffres).</span>
+    }
+  </div>
+
+  <h3>Adresses</h3>
+  <div formArrayName="addresses">
+    @for (address of addresses.controls; track $index; let i = $index) {
+      <div class="card address-card" [formGroupName]="i">
+        <div class="form-row">
+          <label>Rue *</label>
+          <input formControlName="street" [class.invalid]="invalid(address.get('street'))" />
+          @if (invalid(address.get('street'))) {
+            <span class="field-error">La rue est obligatoire.</span>
+          }
+        </div>
+        <div class="form-row">
+          <label>Ville *</label>
+          <input formControlName="city" [class.invalid]="invalid(address.get('city'))" />
+          @if (invalid(address.get('city'))) {
+            <span class="field-error">La ville est obligatoire.</span>
+          }
+        </div>
+        <div class="form-row">
+          <label>Code postal</label>
+          <input formControlName="postalCode" />
+        </div>
+        <div class="form-row">
+          <label>Pays *</label>
+          <input formControlName="country" [class.invalid]="invalid(address.get('country'))" />
+          @if (invalid(address.get('country'))) {
+            <span class="field-error">Le pays est obligatoire.</span>
+          }
+        </div>
+        <button class="btn btn-danger" type="button" (click)="removeAddress(i)">Supprimer cette adresse</button>
+      </div>
+    }
+  </div>
+
+  <p><button class="btn btn-secondary" type="button" (click)="addAddress()">+ Ajouter une adresse</button></p>
+
+  <div class="actions">
+    <button class="btn" type="submit">Enregistrer</button>
+    <a class="btn btn-secondary" routerLink="/clients">Annuler</a>
+  </div>
+</form>
